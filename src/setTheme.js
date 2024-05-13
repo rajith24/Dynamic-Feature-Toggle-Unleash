@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import DarkLogo from './img/syncpilot-o-black.png';
-import LightLogo from './img/syncpilot-o-e6.png';
 
 const Theme = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -29,9 +27,9 @@ const Theme = () => {
         // console.log(favicon)
         if(favicon != null && favicon != undefined){
             if (isDarkMode) {
-                favicon[0].href = LightLogo;
+                favicon[0].href = '';
             } else {
-                favicon[0].href = DarkLogo;
+                favicon[0].href = '';
             }
         }
        
