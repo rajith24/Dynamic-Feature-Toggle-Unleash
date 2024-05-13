@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  unleash-frontend:
+    # build:
+    #   # context: ./server
+    #   dockerfile: Dockerfile
+    image: unleash-frontend:latest
+    container_name: unleash-frontend
+    networks:
+      - core_net
+    # ports:
+    #   - "8000:8000"  # Map container port 8000 to host port 
+    depends_on:
+      - unleash-backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=core_net"
+      - "traefik.http.routers.unleash-frontend.rule=Host(`unleash.your-hosted-domain.com`)"
+      - "traefik.http.routers.unleash-frontend.entrypoints=https"
+      - "traefik.http.routers.unleash-frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.unleash-frontend.loadbalancer.server.port=8000"
+
+  unleash-backend:
+    # build:
+    #   context: ./server
+    #   dockerfile: Dockerfile
+    image: unleash-backend:latest
+    container_name: unleash-backend
+    networks:
+      - core_net
+    # ports:
+    #   - "3001:3001"  # Map container port 3000 to host port 3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=core_net"
+      - "traefik.http.routers.unleash-backend.rule=Host(`unleash-api.your-hosted-domain.com`)"
+      - "traefik.http.routers.unleash-backend.entrypoints=https"
+      - "traefik.http.routers.unleash-backend.tls.certresolver=myresolver"
+      - "traefik.http.services.unleash-backend.loadbalancer.server.port=3001"
+
+networks:
+  core_net:
+    external: true
